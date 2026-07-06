@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PackSpy · Real-time Network Packet Analyzer</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%9B%B0%EF%B8%8F%3C/text%3E%3C/svg%3E" />
+  <meta name="description" content="A real-time network packet analyzer that visualises traffic as cars on roads — one road per protocol, with a Wireshark-style dissector." />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">🛰️</span>
+      <div>
+        <h1>PackSpy</h1>
+        <p>Real-time network packet analyzer · traffic as cars on roads</p>
+      </div>
+    </div>
+
+    <div class="kpis">
+      <div class="kpi"><span class="kpi-val" id="stat-pps">0</span><span class="kpi-lbl">packets/s</span></div>
+      <div class="kpi"><span class="kpi-val" id="stat-bps">0 b/s</span><span class="kpi-lbl">throughput</span></div>
+      <div class="kpi"><span class="kpi-val" id="stat-total">0</span><span class="kpi-lbl">total</span></div>
+      <div class="kpi alert-kpi"><span class="kpi-val" id="stat-alerts">0</span><span class="kpi-lbl">alerts</span></div>
+    </div>
+
+    <div class="conn sim" id="conn-status">Simulating synthetic traffic</div>
+  </header>
+
+  <div class="mixbar-row">
+    <span class="mixbar-label">protocol&nbsp;mix</span>
+    <div class="mix-bar" id="mix-bar"></div>
+  </div>
+
+  <main>
+    <section class="stage">
+      <div class="controls">
+        <div class="mode-switch">
+          <button class="mode-btn active" data-mode="sim">◆ Simulate</button>
+          <button class="mode-btn" data-mode="live">● Live capture</button>
+        </div>
+
+        <div id="scenario-wrap" class="control-group">
+          <label>Scenario</label>
+          <select id="scenario"></select>
+        </div>
+
+        <div id="live-config" class="control-group hidden">
+          <label>Backend</label>
+          <input id="ws-url" type="text" value="ws://localhost:8000/ws" />
+          <button id="btn-connect" class="btn">Connect</button>
+        </div>
+
+        <div class="control-group">
+          <label>Speed <span id="speed-val">1.0×</span></label>
+          <input id="speed" type="range" min="0.2" max="3" step="0.1" value="1" />
+        </div>
+
+        <div class="control-group buttons">
+          <button id="btn-pause" class="btn">⏸ Pause</button>
+          <button id="btn-clear" class="btn ghost">Clear</button>
+        </div>
+      </div>
+
+      <div class="legend" id="legend"></div>
+
+      <div class="road-wrap" id="road-wrap">
+        <div class="lane-labels">
+          <span>HTTP</span><span>TLS</span><span>DNS</span>
+          <span>TCP</span><span>UDP</span><span>ICMP</span>
+        </div>
+        <canvas id="road"></canvas>
+        <div class="road-hint">↑ outbound&nbsp;&nbsp;·&nbsp;&nbsp;inbound ↓&nbsp;&nbsp;·&nbsp;&nbsp;click a car to dissect it</div>
+      </div>
+    </section>
+
+    <aside class="sidepane">
+      <div class="pane-block talkers-block">
+        <h2>Top talkers</h2>
+        <div id="talkers" class="talkers"></div>
+      </div>
+
+      <div class="pane-block list-block">
+        <h2>Live packets</h2>
+        <div class="pkt-head">
+          <span class="c-no">#</span><span class="c-time">time</span>
+          <span class="c-proto">proto</span><span class="c-src">source</span>
+          <span class="c-dst">dest</span><span class="c-len">len</span><span class="c-info">info</span>
+        </div>
+        <div id="pkt-list" class="pkt-list"></div>
+      </div>
+
+      <div class="pane-block detail-block">
+        <h2>Packet dissection</h2>
+        <div id="pkt-detail" class="pkt-detail"></div>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="footer">
+    <span>PackSpy — sim mode runs 100% in your browser. For real capture, run <code>backend/capture_server.py</code> (pyshark + tshark) and switch to <b>Live capture</b>.</span>
+  </footer>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
