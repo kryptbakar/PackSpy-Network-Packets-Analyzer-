@@ -141,24 +141,14 @@ input[type=range] { accent-color: var(--accent); width: 130px; }
 
 /* ---------- Road (canvas) ---------- */
 .road-wrap {
-  position: relative; flex: 1; min-height: 340px;
-  background: linear-gradient(180deg, #070b14, #0a0f1c);
+  position: relative; flex: 1; min-height: 360px;
+  background: #05070e;
   border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden;
-  padding-left: 58px;
   transition: box-shadow 0.4s;
 }
 .road-wrap.alert-mode { box-shadow: inset 0 0 0 1px rgba(255,91,110,0.5), 0 0 30px rgba(255,91,110,0.12); }
 #road { width: 100%; height: 100%; display: block; }
 
-.lane-labels {
-  position: absolute; left: 0; top: 8px; bottom: 8px; width: 58px;
-  display: flex; flex-direction: column; justify-content: space-around;
-  pointer-events: none;
-}
-.lane-labels span {
-  font-size: 10px; font-weight: 700; letter-spacing: 0.5px; color: var(--muted);
-  text-align: center; text-transform: uppercase;
-}
 .road-hint {
   position: absolute; bottom: 8px; right: 14px; font-size: 11px; color: var(--muted);
   background: rgba(10,14,23,0.7); padding: 4px 10px; border-radius: 6px; pointer-events: none;
